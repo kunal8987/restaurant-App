@@ -1,0 +1,15 @@
+{
+  "name": "restorent-server",
+  "version": "1.0.0",
+  "description": "restorent app server folder and files",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "kunal D",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "mongoose": "^8.0.3"
+  }
+}
