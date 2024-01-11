@@ -7,7 +7,7 @@ const authentication = async (req, res, next) => {
   try {
     //DECODE AND VERIFY THE TOKEN
     const decode = jwt.verify(req.headers.authorization, process.env.JWT_KEY);
-    req.user = decode;
+    req._id = decode._id;
     //FURTHER PROCESS THROUGH NEXT
     next();
 
