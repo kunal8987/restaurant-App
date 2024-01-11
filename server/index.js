@@ -3,6 +3,7 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const { connection } = require("./db");
 const { userRouter } = require("./src/router/userRouter");
+const { restaurantRouter } = require("./src/router/restaurant.router");
 
 // INITIALIZATION OF EXPRESS APP
 const app = express();
@@ -19,6 +20,9 @@ app.use(cors());
 //ROUTES
 
 app.use("/users", userRouter);
+
+//RESTAURANT ROUTE
+app.use("/restaurants", restaurantRouter);
 app.get("/", (req, res) => {
   res.send("<h1> hello world!</h1>");
 });
