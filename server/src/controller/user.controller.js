@@ -24,7 +24,7 @@ const registerData = async (req, res) => {
       return res.status(200).send({
         success: true,
         massage: "User Already Exists",
-        existingUser,
+        // existingUser,
       });
     }
 
@@ -41,9 +41,10 @@ const registerData = async (req, res) => {
       answer,
     });
     user.save();
+    user.password = undefined;
     return res.status(200).send({
       success: true,
-      massage: "User Registration Success",
+      massage: "User Registration Successfully",
       user,
     });
 
@@ -187,7 +188,6 @@ const updateUserData = async (req, res) => {
 };
 
 //PASSWORD RESET FUNCTION
-
 const passwordResetData = async (req, res) => {
   try {
     //GETTING FROM REQ BODY
@@ -230,10 +230,29 @@ const passwordResetData = async (req, res) => {
   }
 };
 
+//DELETE USER ACCOUNT OR PROFILE
+const deleteAccountData = async (req, res) => {
+  try {
+    await UserModel.findByIdAndDelete(req.params.id);
+    return res.status(200).send({
+      success: true,
+      massage: "Your Account Deleted Successfully",
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send({
+      success: false,
+      massage: "Error From Delete Account Data Function User Controller ",
+      error,
+    });
+  }
+};
+
 module.exports = {
   registerData,
   loginData,
   getUserData,
   updateUserData,
   passwordResetData,
+  deleteAccountData,
 };
