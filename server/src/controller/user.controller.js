@@ -9,10 +9,10 @@ dotenv.config();
 const registerData = async (req, res) => {
   try {
     // GET DATA FROM REQUEST BODY
-    let { userName, password, email, address, phone } = req.body;
+    let { userName, password, email, address, phone, answer } = req.body;
 
     //VALIDATING DATA
-    if (!userName || !password || !email || !phone) {
+    if (!userName || !password || !email || !phone || !answer) {
       return res.status(404).send({
         success: false,
         massage: "Please Fill All The Details Below",
@@ -38,6 +38,7 @@ const registerData = async (req, res) => {
       password: hashedPassword,
       address,
       phone,
+      answer,
     });
     user.save();
     return res.status(200).send({
@@ -114,7 +115,125 @@ const loginData = async (req, res) => {
   }
 };
 
+//GET USER DATA FUNCTION
+
+const getUserData = async (req, res) => {
+  try {
+    let user = await UserModel.findById({ _id: req._id });
+    if (!user) {
+      return res.status(404).send({
+        success: false,
+        massage: "User Not Found ",
+      });
+    }
+
+    //HIDING THE PASSWORD
+    user.password = undefined;
+
+    //GET RESPONSE
+    return res.status(200).send({
+      success: true,
+      massage: "User Found Successfully",
+      user,
+    });
+    // console.log(req._id);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send({
+      success: false,
+      massage: "Error From get User Data Function User Controller ",
+      error,
+    });
+  }
+};
+
+//UPDATE USER DATA FUNCTION
+const updateUserData = async (req, res) => {
+  try {
+    let user = await UserModel.findById({ _id: req._id });
+    if (!user) {
+      return res.status(404).send({
+        success: false,
+        massage: "User Not Found ",
+      });
+    }
+
+    //UPDATING USER DATA
+    let { userName, phone, address } = req.body;
+
+    if (userName) user.userName = userName;
+    if (address) user.address = address;
+    if (phone) user.phone = phone;
+
+    await user.save();
+    //HIDING THE PASSWORD
+    user.password = undefined;
+
+    //GET RESPONSE
+    return res.status(200).send({
+      success: true,
+      massage: "User Update Successfully",
+      user,
+    });
+    // console.log(req._id);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send({
+      success: false,
+      massage: "Error From Update User Data Function User Controller ",
+      error,
+    });
+  }
+};
+
+//PASSWORD RESET FUNCTION
+
+const passwordResetData = async (req, res) => {
+  try {
+    //GETTING FROM REQ BODY
+    let { email, newPassword, answer } = req.body;
+
+    //VALIDATE THE USER
+    if (!email || !newPassword || !answer) {
+      return res.status(404).send({
+        success: false,
+        massage: "Please Fill All The Details Below",
+      });
+    }
+
+    //FINDING THE USER
+    let user = await UserModel.findOne({ email, answer });
+    if (!user) {
+      return res.status(404).send({
+        success: false,
+        massage: "User Not Found Or Wrong Answer",
+      });
+    }
+    //HASH THE PASSWORD
+    let hashedPassword = await hashPassword(newPassword);
+
+    //UPDATE THE PASSWORD
+    user.password = hashedPassword;
+    await user.save();
+    //GET RESPONSE
+    return res.status(200).send({
+      success: true,
+      massage: "User Password Update Successfully",
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send({
+      success: false,
+      massage: "Error From Password Reset Data Function User Controller ",
+      error,
+    });
+  }
+};
+
 module.exports = {
   registerData,
   loginData,
+  getUserData,
+  updateUserData,
+  passwordResetData,
 };

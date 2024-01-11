@@ -31,6 +31,10 @@ const userSchema = mongoose.Schema(
       type: String,
       default: "https://cdn-icons-png.freepik.com/128/1077/1077114.png",
     },
+    answer: {
+      type: String,
+      required: [true, "answer is required"],
+    },
   },
   {
     timestamps: true,

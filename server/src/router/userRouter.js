@@ -1,5 +1,11 @@
 const express = require("express");
-const { registerData, loginData } = require("../controller/user.controller");
+const {
+  registerData,
+  loginData,
+  getUserData,
+  updateUserData,
+  passwordResetData,
+} = require("../controller/user.controller");
 const { authentication } = require("../middleware/auth.middleware");
 
 const userRouter = express.Router();
@@ -8,5 +14,14 @@ userRouter.post("/register", registerData);
 
 //LOGIN ROUTES
 userRouter.post("/login", loginData);
+
+//GET USER DATA ROUTES
+userRouter.get("/get-user", authentication, getUserData);
+
+//UPDATE USER DATA ROUTES
+userRouter.put("/update-user", authentication, updateUserData);
+
+//PASSWORD RESET DATA ROUTES
+userRouter.post("/reset-password", authentication, passwordResetData);
 
 module.exports = { userRouter };
