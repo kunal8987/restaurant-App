@@ -48,7 +48,7 @@ const restaurantSchema = mongoose.Schema(
     time: {
       type: String,
     },
-    food: {
+    foods: {
       type: Array,
     },
   },

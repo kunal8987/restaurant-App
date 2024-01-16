@@ -7,7 +7,7 @@ const createRestaurant = async (req, res) => {
     let {
       title,
       imageUrl,
-      food,
+      foods,
       time,
       address,
       code,
@@ -29,7 +29,7 @@ const createRestaurant = async (req, res) => {
     let newRestaurant = new RestaurantModel({
       title,
       imageUrl,
-      food,
+      foods,
       time,
       address,
       code,
@@ -57,5 +57,88 @@ const createRestaurant = async (req, res) => {
   }
 };
 
+// GET ALL THE RESTAURANT FUNCTIONS
 
-module.exports ={createRestaurant}
+const getAllRestaurantsData = async (req, res) => {
+  try {
+    let restaurants = await RestaurantModel.find();
+    if (!restaurants) {
+      return res.status(404).send({
+        success: false,
+        massage: "No Restaurant Found",
+      });
+    }
+
+    return res.status(200).send({
+      success: true,
+      restaurantCount: restaurants.length,
+      restaurants,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send({
+      success: false,
+      massage: "Error From Get All Restaurant Function Restaurant Controller",
+      error,
+    });
+  }
+};
+
+// GET SINGLE RESTAURANT FUNCTION
+
+const getRestaurantData = async (req, res) => {
+  try {
+    let restaurant = await RestaurantModel.findById(req.params.id);
+    if (!restaurant) {
+      return res.status(404).send({
+        success: false,
+        massage: "No Restaurant Found",
+      });
+    }
+    return res.status(200).send({
+      success: true,
+      massage: "Restaurant Found",
+      restaurant,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send({
+      success: false,
+      massage:
+        "Error From Get Single Restaurant Function Restaurant Controller",
+      error,
+    });
+  }
+};
+
+//DELETE RESTAURANT FUNCTION
+
+const deleteRestaurant = async (req, res) => {
+  try {
+    let restaurant = await RestaurantModel.findByIdAndDelete(req.params.id);
+    if (!restaurant) {
+      return res.status(404).send({
+        success: false,
+        massage: "No Restaurant Found",
+      });
+    }
+    return res.status(200).send({
+      success: true,
+      massage: "Restaurant Deleted Successfully",
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send({
+      success: false,
+      massage: "Error From Delete Restaurant Function Restaurant Controller",
+      error,
+    });
+  }
+};
+
+module.exports = {
+  createRestaurant,
+  getAllRestaurantsData,
+  getRestaurantData,
+  deleteRestaurant,
+};
