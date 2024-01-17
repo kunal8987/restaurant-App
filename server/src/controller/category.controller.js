@@ -58,17 +58,20 @@ const updateCategory = async (req, res) => {
   try {
     const { id } = req.params;
     const { title, imageUrl } = req.body;
-    const updatedCategory = await CategoryModel.findByIdAndUpdate(
-      id,
-      { title, imageUrl },
-      { new: true }
-    );
-    if (!updatedCategory) {
+
+    let category = await CategoryModel.findById(id);
+
+    if (!category) {
       return res.status(404).send({
         success: false,
         message: "No Category Found",
       });
     }
+    const updatedCategory = await CategoryModel.findByIdAndUpdate(
+      id,
+      { title, imageUrl },
+      { new: true }
+    );
     return res.status(200).send({
       success: true,
       message: "Category Updated Successfully",

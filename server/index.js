@@ -5,6 +5,7 @@ const { connection } = require("./db");
 const { userRouter } = require("./src/router/userRouter");
 const { restaurantRouter } = require("./src/router/restaurant.router");
 const { categoryRouter } = require("./src/router/category.router");
+const { foodRouter } = require("./src/router/food.router");
 
 // INITIALIZATION OF EXPRESS APP
 const app = express();
@@ -27,6 +28,9 @@ app.use("/restaurants", restaurantRouter);
 
 //CATEGORY ROUTE
 app.use("/category", categoryRouter);
+
+//FOOD ROUTE
+app.use("/foods", foodRouter);
 app.get("/", (req, res) => {
   res.send("<h1> hello world!</h1>");
 });
